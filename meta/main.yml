@@ -12,5 +12,6 @@ galaxy_info:
     - all
   categories:
   - system
+  - development
 
 dependencies: []
