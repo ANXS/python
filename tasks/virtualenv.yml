@@ -1,0 +1,7 @@
+# file: python/tasks/virtualenv.yml
+
+- name: python | virtualenv | install virtualenv
+  pip:
+    name: "setuptools"
+    version: "{{python_virtualenv_version | default()}}"
+    state: installed

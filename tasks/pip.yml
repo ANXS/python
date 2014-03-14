@@ -1,0 +1,19 @@
+# file: python/tasks/pip.yml
+
+- name: python | pip | Upload the pip install script
+  copy:
+    src: get-pip.py
+    dest: /tmp/get-pip.py
+    owner: root
+    group: root
+    mode: 0644
+
+- name: python | pip | install pip
+  command: "{{pyton_binary}} get-pip.py"
+  creates: {{python_pip_binary}}
+
+- name: python | pip | update setuptools
+  pip:
+    name: "setuptools"
+    version: "{{python_setuptools_version | default()}}"
+    state: installed
