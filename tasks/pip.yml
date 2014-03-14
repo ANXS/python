@@ -9,11 +9,9 @@
     mode: 0644
 
 - name: python | pip | install pip
-  command: "{{pyton_binary}} get-pip.py"
-  creates: {{python_pip_binary}}
+  command: python /tmp/get-pip.py creates="{{python_pip_location}}"
 
 - name: python | pip | update setuptools
   pip:
-    name: "setuptools"
-    version: "{{python_setuptools_version | default()}}"
-    state: installed
+    name: "setuptools{% if python_setuptools_version is defined %}=={{python_setuptools_version}}{% endif %}"
+    state: present

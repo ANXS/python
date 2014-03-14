@@ -2,6 +2,5 @@
 
 - name: python | virtualenv | install virtualenv
   pip:
-    name: "setuptools"
-    version: "{{python_virtualenv_version | default()}}"
-    state: installed
+    name: "virtualenv{% if python_virtualenv_version is defined %}=={{python_virtualenv_version}}{% endif %}"
+    state: present
