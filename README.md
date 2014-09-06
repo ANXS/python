@@ -1,4 +1,4 @@
-## Ansibles - python [![Build Status](https://travis-ci.org/Ansibles/python.png)](https://travis-ci.org/Ansibles/python)
+## ANXS - python [![Build Status](https://travis-ci.org/ANXS/python.png)](https://travis-ci.org/ANXS/python)
 
 Ansible role which installs python, pip, setuptools and virtualenv
 
@@ -22,4 +22,4 @@ Licensed under the MIT License. See the LICENSE file for details.
 
 #### Feedback, bug-reports, requests, ...
 
-Are [welcome](https://github.com/ansibles/python/issues)!
+Are [welcome](https://github.com/ANXS/python/issues)!
