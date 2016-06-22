@@ -1,12 +1,9 @@
 # file: python/tasks/pip.yml
 
-- name: python | pip | Upload the pip install script
-  copy:
-    src: get-pip.py
-    dest: /tmp/get-pip.py
-    owner: root
-    group: root
-    mode: 0644
+- name: python | pip | Fetch the pip install script
+  get_url:
+    dest: "/tmp/get-pip.py"
+    url: "{{get_pip_url}}"
 
 - name: python | pip | install pip
   command: python /tmp/get-pip.py creates="{{python_pip_location}}"

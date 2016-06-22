@@ -11,3 +11,5 @@ python_virtualenv_location: "{{python_prefix_dir}}/bin/virtualenv"
 python_source_url: "http://www.python.org/ftp/python"
 python_source_version: "2.7.6"
 python_source_configure_options: "--prefix={{python_prefix_dir}}"
+
+get_pip_url: "https://bootstrap.pypa.io/get-pip.py"
