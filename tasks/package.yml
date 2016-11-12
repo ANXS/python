@@ -7,5 +7,5 @@
   apt:
     pkg: "{{item}}"
     state: present
-  with_items: python_packages
+  with_items: "{{ python_packages }}"
   when: ansible_os_family == "Debian"
