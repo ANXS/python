@@ -5,7 +5,6 @@
 
 - name: python | Make sure the packages are installed (Debian)
   apt:
-    pkg: "{{item}}"
+    pkg: "{{python_packages}}"
     state: present
-  with_items: "{{ python_packages }}"
   when: ansible_os_family == "Debian"

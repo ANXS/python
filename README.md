@@ -1,10 +1,10 @@
-## ANXS - python [![Build Status](https://travis-ci.org/ANXS/python.png)](https://travis-ci.org/ANXS/python)
+## ANXS - python [![Build Status](https://travis-ci.com/ANXS/python.png)](https://travis-ci.com/ANXS/python)
 
 Ansible role which installs python, pip, setuptools and virtualenv
 
 
 #### Requirements & Dependencies
-- Tested on Ansible 1.4 or higher.
+- Tested on Ansible 2.3 or higher.
 
 
 #### Variables
