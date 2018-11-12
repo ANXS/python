@@ -1,4 +1,4 @@
-## ANXS - python [![Build Status](https://travis-ci.org/ANXS/python.png)](https://travis-ci.org/ANXS/python)
+## ANXS - python [![Build Status](https://travis-ci.com/ANXS/python.png)](https://travis-ci.com/ANXS/python)
 
 Ansible role which installs python, pip, setuptools and virtualenv
 
