@@ -1,14 +1,25 @@
 # file: python/tasks/pip.yml
 
-- name: python | pip | Fetch the pip install script
-  get_url:
-    dest: "/tmp/get-pip.py"
-    url: "{{get_pip_url}}"
+- name: python | pip2 | Install pip2
+  apt:
+    name: python-pip
+  when: python_source_version | int == 2
 
-- name: python | pip | install pip
-  command: python /tmp/get-pip.py creates="{{python_pip_location}}"
-
-- name: python | pip | update setuptools
+- name: python | pip2 | Install setuptools
   pip:
     name: "setuptools{% if python_setuptools_version is defined %}=={{python_setuptools_version}}{% endif %}"
     state: present
+    executable: /usr/bin/pip
+  when: python_source_version | int == 2
+
+- name: python | pip | Install pip
+  apt:
+    name: python3-pip
+  when: python_source_version | int == 3
+
+- name: python | pip | Install setuptools
+  pip:
+    name: "setuptools{% if python_setuptools_version is defined %}=={{python_setuptools_version}}{% endif %}"
+    state: present
+    executable: /usr/bin/pip3
+  when: python_source_version | int == 2
