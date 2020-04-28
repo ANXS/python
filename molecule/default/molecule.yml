@@ -18,7 +18,6 @@ scenario:
     - create
     - converge
     - idempotence
-    - side_effect
     - verify
     - destroy
 provisioner:
