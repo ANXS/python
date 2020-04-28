@@ -1,0 +1,6 @@
+---
+# file: python/vars/main.yml
+
+debian_python_packages:
+  - "python{{ python_source_version }}"
+  - "python{{ python_source_version }}-dev"
