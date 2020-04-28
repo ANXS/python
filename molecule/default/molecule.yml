@@ -1,0 +1,29 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+lint: yamllint .
+platforms:
+  - name: python3-ubuntu-1804
+    image: solita/ubuntu-systemd:18.04
+    privileged: true
+    command: /sbin/init
+scenario:
+  name: default
+  test_sequence:
+    - lint
+    - destroy
+    - syntax
+    - create
+    - converge
+    - idempotence
+    - side_effect
+    - verify
+    - destroy
+provisioner:
+  name: ansible
+  lint: ansible-lint
+verifier:
+  name: testinfra
+  lint: flake8
