@@ -7,3 +7,4 @@
       python_packages:
         - python
         - python-dev
+        - python-setuptools
