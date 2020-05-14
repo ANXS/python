@@ -1,0 +1,18 @@
+# file: python/tasks/python.yml
+
+- name: Add Python PPA
+  apt_repository:
+    repo: "{{ python_apt_ppa }}"
+    state: present
+  become: true
+  become_user: root
+  when: python_apt_ppa is defined and python_apt_ppa != ""
+
+- name: Update apt cache
+  apt:
+    update_cache: "yes"
+
+- name: python | Install python packages
+  apt:
+    pkg: "{{ python_packages }}"
+    state: present
