@@ -1,0 +1,18 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+platforms:
+  - name: python2-ubuntu-1804
+    image: solita/ubuntu-systemd:18.04
+    privileged: true
+    command: /sbin/init
+scenario:
+  name: python2
+  test_sequence:
+    - destroy
+    - create
+    - converge
+    - idempotence
+    - destroy

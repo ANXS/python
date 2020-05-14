@@ -2,4 +2,3 @@
 
 - include: python.yml
 - include: pip.yml
-- include: virtualenv.yml

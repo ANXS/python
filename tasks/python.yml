@@ -1,5 +1,13 @@
 # file: python/tasks/python.yml
 
+- name: Install gnupg
+  apt:
+    name: gnupg
+    state: present
+  become: true
+  become_user: root
+  when: python_apt_ppa is defined and python_apt_ppa != ""
+
 - name: Add Python PPA
   apt_repository:
     repo: "{{ python_apt_ppa }}"

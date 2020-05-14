@@ -4,7 +4,7 @@ python_prefix_dir: "/usr/local"
 python_pip_location: "{{python_prefix_dir}}/bin/pip"
 
 python_source_version: "3.6"
-python_apt_ppa: "ppa:deadsnakes/ppa"
+python_apt_ppa: ""
 python_packages:
   - python3-distutils
   - python3-dev
