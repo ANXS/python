@@ -1,14 +1,14 @@
-# file: python/tasks/pip.yml
-
-- name: python | pip | Fetch the pip install script
+---
+- name: "Fetch the pip install script"
   get_url:
     dest: "/tmp/get-pip.py"
     url: "{{get_pip_url}}"
 
-- name: python | pip | install pip
-  command: python /tmp/get-pip.py creates="{{python_pip_location}}"
+- name: "install pip"
+  command: python /tmp/get-pip.py
+  creates: "{{python_pip_location}}"
 
-- name: python | pip | update setuptools
+- name: "update setuptools"
   pip:
     name: "setuptools{% if python_setuptools_version is defined %}=={{python_setuptools_version}}{% endif %}"
     state: present

@@ -1,4 +1,4 @@
-# file: python/defaults/main.yml
+---
 
 python_prefix_dir: "/usr/local"
 python_binary: "{{python_prefix_dir}}/bin/python"

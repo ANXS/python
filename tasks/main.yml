@@ -1,5 +1,4 @@
-# file: python/tasks/main.yml
-
-- include: package.yml
-- include: pip.yml
-- include: virtualenv.yml
+---
+- include_tasks: "package.yml"
+- include_tasks: "pip.yml"
+- include_tasks: "virtualenv.yml"
