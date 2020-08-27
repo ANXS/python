@@ -6,7 +6,8 @@
 
 - name: "install pip"
   command: python /tmp/get-pip.py
-  creates: "{{python_pip_location}}"
+  args:
+    creates: "{{python_pip_location}}"
 
 - name: "update setuptools"
   pip:
