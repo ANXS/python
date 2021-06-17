@@ -1,0 +1,6 @@
+molecule
+molecule-docker
+docker-py
+netaddr
+pytest
+testinfra

@@ -1,0 +1,33 @@
+---
+driver:
+  name: "docker"
+platforms:
+  - name: "default-bionic"
+    image: "anxsscaffolding/ubuntu-bionic"
+    command: /sbin/init
+    pre_build_image: true
+    tmpfs:
+      - /run
+      - /run/lock
+      - /tmp
+    privileged: true
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  - name: "default-focal"
+    image: "anxsscaffolding/ubuntu-focal"
+    command: /sbin/init
+    pre_build_image: true
+    tmpfs:
+      - /run
+      - /run/lock
+      - /tmp
+    privileged: true
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+provisioner:
+  name: ansible
+  playbooks:
+    converge: ../resources/playbooks/converge.yml
+    prepare: ../resources/playbooks/prepare.yml
+verifier:
+  name: testinfra

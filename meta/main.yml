@@ -1,16 +1,17 @@
 ---
 galaxy_info:
-  author: ANXS crew
-  company: ANXS
+  author: "ANXS crew"
+  company: "ANXS"
   description: "Installs python, pip, setuptools and virtualenv"
-  min_ansible_version: 2.7
-  license: MIT
+  min_ansible_version: 2.9
+  license: "MIT"
   platforms:
-    - name: Ubuntu
+    - name: "Ubuntu"
       versions:
-        - all
+        - "bionic"
+        - "focal"
   categories:
-    - system
-    - development
+    - "system"
+    - "development"
 
 dependencies: []

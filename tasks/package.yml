@@ -1,9 +1,12 @@
 ---
-- name: "Get the distribution specific variables"
-  include_vars: "{{ansible_os_family}}.yml"
-
-- name: "Make sure the packages are installed (Debian)"
+- name: "Make sure the packages are installed"
   apt:
-    pkg: "{{python_packages}}"
-    state: present
-  when: ansible_os_family == "Debian"
+    pkg: "{{python_packages_add}}"
+    state: "present"
+  when: python_packages|default([])|length > 0
+
+- name: "Make sure old packages are removed"
+  apt:
+    pkg: "{{python_packages_remove}}"
+    state: "absent"
+  when: python_packages_old|default([])|length > 0

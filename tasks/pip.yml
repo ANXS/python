@@ -5,7 +5,7 @@
     url: "{{get_pip_url}}"
 
 - name: "install pip"
-  command: python /tmp/get-pip.py
+  command: python3 /tmp/get-pip.py
   args:
     creates: "{{python_pip_location}}"
 
