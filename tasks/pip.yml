@@ -15,12 +15,12 @@
 
 - name: python | pip | update setuptools
   pip:
-    name: "setuptools{% if python_setuptools_version is defined %}=={{ python_setuptools_version }}{% endif %}"
+    name: "setuptools{% if python_setuptools_version is defined and python_setuptools_version %}=={{ python_setuptools_version }}{% endif %}"
     state: present
     executable: "{{ python_pip_location }}"
 
 - name: python | virtualenv | install virtualenv
   pip:
-    name: "virtualenv{% if python_virtualenv_version is defined %}=={{ python_virtualenv_version }}{% endif %}"
+    name: "virtualenv{% if python_virtualenv_version is defined and python_virtualenv_version %}=={{ python_virtualenv_version }}{% endif %}"
     state: present
     executable: "{{ python_pip_location }}"
