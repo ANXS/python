@@ -3,6 +3,7 @@
   apt:
     pkg: "{{python_packages_add}}"
     state: "present"
+    update_cache: true
   when: python_packages_add|default([])|length > 0
 
 - name: "Make sure old packages are removed"
