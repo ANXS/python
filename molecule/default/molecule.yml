@@ -6,7 +6,19 @@ driver:
 lint: yamllint .
 platforms:
   - name: python3-ubuntu-1804
-    image: solita/ubuntu-systemd:18.04
+    image: ubuntu:18.04
+    privileged: true
+    command: /sbin/init
+  - name: python3-ubuntu-2004
+    image: ubuntu:20.04
+    privileged: true
+    command: /sbin/init
+  - name: python3-ubuntu-2203
+    image: ubuntu:22.04
+    privileged: true
+    command: /sbin/init
+  - name: python3-ubuntu-latest
+    image: ubuntu:latest
     privileged: true
     command: /sbin/init
 scenario:
