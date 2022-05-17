@@ -1,13 +1,8 @@
 # file: python/defaults/main.yml
-
-python_prefix_dir: "/usr"
-python_pip_location: "{{python_prefix_dir}}/local/bin/pip"
-python_binary_location: "{{ python_prefix_dir }}/bin/python3"
-
-python_source_version: "3.6"
+python_source_version: "3.8"
 python_apt_ppa:
 python_packages:
-  - python3-distutils
-  - python3-dev
-
-get_pip_url: "https://bootstrap.pypa.io/get-pip.py"
+  - "python{{ source_version }}"
+  - "python{{ source_version }}-dev"
+  - "python{{ source_version.split('.')[0] }}-distutils"
+  - "python{{ source_version.split('.')[0] }}-pip"

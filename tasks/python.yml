@@ -6,7 +6,9 @@
     state: present
   become: true
   become_user: root
-  when: python_apt_ppa is defined and python_apt_ppa
+  when:
+    - python_apt_ppa is defined and python_apt_ppa
+    - ansible_distribution == "Ubuntu" & ansible_distribution_major_version == "18"
 
 - name: Add Python PPA
   apt_repository:
@@ -14,7 +16,9 @@
     state: present
   become: true
   become_user: root
-  when: python_apt_ppa is defined and python_apt_ppa
+  when:
+    - python_apt_ppa is defined and python_apt_ppa
+    - ansible_distribution == "Ubuntu" & ansible_distribution_major_version == "18"
 
 - name: Update apt cache
   apt:
