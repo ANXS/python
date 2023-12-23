@@ -13,3 +13,5 @@ python_source_version: "2.7.6"
 python_source_configure_options: "--prefix={{python_prefix_dir}}"
 
 get_pip_url: "https://bootstrap.pypa.io/get-pip.py"
+
+python_versions: []

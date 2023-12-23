@@ -1,8 +1,13 @@
 ---
+- name: "Make sure PPA is enabled"
+  apt_repository:
+    repo: "ppa:deadsnakes/ppa"
+    mode: "0644"
+
 - name: "Make sure the packages are installed"
   apt:
     pkg: "{{python_packages_add}}"
-    state: "present"
+    state: "latest"
     update_cache: true
   when: python_packages_add|default([])|length > 0
 
@@ -11,3 +16,13 @@
     pkg: "{{python_packages_remove}}"
     state: "absent"
   when: python_packages_remove|default([])|length > 0
+
+- name: "install additional python versions, if requested"
+  apt:
+    pkg:
+      - "python{{item}}"
+      - "python{{item}}-distutils"
+      - "python{{item}}-dev"
+      - "python{{item}}-venv"
+    state: "latest"
+  with_items: "{{python_versions}}"
