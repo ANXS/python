@@ -5,5 +5,3 @@
 - include_tasks: "package.yml"
 
 - include_tasks: "pip.yml"
-
-- include_tasks: "virtualenv.yml"
