@@ -18,7 +18,7 @@
     state: "absent"
   when: python_packages_remove|default([])|length > 0
 
-- name: "install additional python versions, if requested"
+- name: "install additional (legacy) python versions, if requested"
   apt:
     pkg:
       - "python{{item}}"
@@ -27,3 +27,14 @@
       - "python{{item}}-venv"
     state: "latest"
   with_items: "{{python_versions}}"
+  when: item|float < 3.12
+
+- name: "install additional python versions, if requested"
+  apt:
+    pkg:
+      - "python{{item}}"
+      - "python{{item}}-dev"
+      - "python{{item}}-venv"
+    state: "latest"
+  with_items: "{{python_versions}}"
+  when: item|float >= 3.12
