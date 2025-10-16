@@ -1,10 +1,40 @@
-# file: python/tasks/default.yml
+---
+- name: "Make sure PPA is enabled"
+  apt_repository:
+    repo: "ppa:deadsnakes/ppa"
+    mode: "0644"
+  when: python_versions|length > 0
 
-- name: python | Get the distribution specific variables
-  include_vars: "{{ansible_os_family}}.yml"
-
-- name: python | Make sure the packages are installed (Debian)
+- name: "Make sure the packages are installed"
   apt:
-    pkg: "{{python_packages}}"
-    state: present
-  when: ansible_os_family == "Debian"
+    pkg: "{{ python_packages_add }}"
+    state: "latest"
+    update_cache: true
+  when: python_packages_add|default([])|length > 0
+
+- name: "Make sure old packages are removed"
+  apt:
+    pkg: "{{ python_packages_remove }}"
+    state: "absent"
+  when: python_packages_remove|default([])|length > 0
+
+- name: "Install additional (legacy) python versions, if requested"
+  apt:
+    pkg:
+      - "python{{ item }}"
+      - "python{{ item }}-distutils"
+      - "python{{ item }}-dev"
+      - "python{{ item }}-venv"
+    state: "latest"
+  with_items: "{{ python_versions }}"
+  when: item|float < 3.12
+
+- name: "Install additional python versions, if requested"
+  apt:
+    pkg:
+      - "python{{ item }}"
+      - "python{{ item }}-dev"
+      - "python{{ item }}-venv"
+    state: "latest"
+  with_items: "{{ python_versions }}"
+  when: item|float >= 3.12

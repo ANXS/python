@@ -1,0 +1,7 @@
+---
+# UV checksums for different versions and architectures
+python_uv_checksums:
+  "0.9.3":
+    "x86_64-unknown-linux-gnu": "sha256:4d6f84490da4b21bb6075ffc1c6b22e0cf37bc98d7cca8aff9fbb759093cdc23"
+    "aarch64-unknown-linux-gnu": "sha256:2094a3ead5a026a2f6894c4d3f71026129c8878939a57f17f0c8246a737bed1d"
+    "armv7-unknown-linux-gnueabihf": "sha256:a524b78c31a43131ad0872e56fcaeb36616f11e5323acb74b547157272723eb6"

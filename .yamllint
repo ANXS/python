@@ -1,0 +1,51 @@
+---    # -*-YAML-*-
+extends: default
+
+ignore: |
+  .cache/
+  .git/
+  .github/
+  molecule/*/tests/
+  vagrant-inventory
+  tasks/.#*
+
+rules:
+  line-length:
+    max: 120
+    level: warning
+
+  indentation:
+    spaces: 2
+    indent-sequences: true
+    check-multi-line-strings: false
+
+  comments:
+    min-spaces-from-content: 1
+
+  document-start:
+    present: true
+
+  trailing-spaces: enable
+
+  empty-lines:
+    max: 2
+    max-start: 0
+    max-end: 1
+
+  brackets:
+    min-spaces-inside: 0
+    max-spaces-inside: 1
+
+  braces:
+    min-spaces-inside: 0
+    max-spaces-inside: 1
+
+  key-duplicates: enable
+
+  octal-values:
+    forbid-implicit-octal: true
+    forbid-explicit-octal: false
+
+  truthy:
+    allowed-values: ['true', 'false', 'yes', 'no']
+    check-keys: true

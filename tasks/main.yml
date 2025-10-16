@@ -1,5 +1,13 @@
-# file: python/tasks/main.yml
+---
+- name: "Get the distribution specific variables"
+  include_vars: "{{ ansible_distribution | lower }}-{{ ansible_distribution_version }}.yml"
 
-- include: package.yml
-- include: pip.yml
-- include: virtualenv.yml
+- name: "Install python and accesory packages"
+  include_tasks: "package.yml"
+
+- name: "Ensure pip is properly installed"
+  include_tasks: "pip.yml"
+
+- name: "Ensure uv is available if desired"
+  include_tasks: "uv.yml"
+  when: python_uv_install

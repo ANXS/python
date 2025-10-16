@@ -1,0 +1,30 @@
+---
+profile: production
+
+exclude_paths:
+  - .cache/
+  - .github/
+  - molecule/*/tests/
+
+skip_list:
+  - yaml[line-length]
+  - fqcn[action-core]  # todo this one is probably worth fixing
+  - package-latest
+
+offline: false
+
+supported_ansible_also:
+  - ">=2.12"
+
+mock_modules:
+  - community.general.ini_file
+  - community.general.alternatives
+
+mock_roles:
+  - external.role.dependency
+
+verbosity: 1
+
+warn_list:
+  - experimental
+  - yaml[truthy]

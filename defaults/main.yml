@@ -1,15 +1,11 @@
-# file: python/defaults/main.yml
-
+---
 python_prefix_dir: "/usr/local"
-python_binary: "{{python_prefix_dir}}/bin/python"
 
-python_pip_location:  "{{python_prefix_dir}}/bin/pip"
-python_virtualenv_location: "{{python_prefix_dir}}/bin/virtualenv"
-# python_setuptools_version:    # default to latest
-# python_virtualenv_version:    # default to latest
+# List of optional deadsnakes versions to install
+python_versions: []
 
-python_source_url: "http://www.python.org/ftp/python"
-python_source_version: "2.7.6"
-python_source_configure_options: "--prefix={{python_prefix_dir}}"
-
-get_pip_url: "https://bootstrap.pypa.io/get-pip.py"
+# UV installation settings
+python_uv_install: false
+python_uv_version: "0.9.3"
+python_uv_install_path: "{{ python_prefix_dir }}/bin"
+python_uv_temp_dir: "/tmp"

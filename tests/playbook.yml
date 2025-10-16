@@ -1,0 +1,16 @@
+---
+- name: Test anxs-python Role
+  hosts: all
+  become: true
+  gather_facts: true
+  vars:
+    # Enable UV installation for testing
+    python_uv_install: "{{ lookup('env', 'PYTHON_UV_INSTALL') | default('true') | bool }}"
+    python_uv_version: "{{ lookup('env', 'PYTHON_UV_VERSION') | default('0.9.3') }}"
+    python_prefix_dir: "{{ lookup('env', 'PYTHON_PREFIX_DIR') | default('/opt/python') }}"
+    # Test different configurations - disable legacy versions for now
+    python_versions: []
+
+    python_ppa: "deadsnakes/ppa"
+  roles:
+    - role: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') | basename }}"

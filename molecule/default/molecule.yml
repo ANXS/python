@@ -1,0 +1,52 @@
+---
+dependency:
+  name: galaxy
+
+driver:
+  name: docker
+
+platforms:
+  - name: "ubuntu-${MOLECULE_UBUNTU_VERSION:-2404}${PYTHON_UV_SUFFIX}"
+    image: "geerlingguy/docker-ubuntu${MOLECULE_UBUNTU_VERSION:-2404}${PYTHON_UV_SUFFIX}-ansible:latest"
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+    privileged: true
+    pre_build_image: true
+    cgroupns_mode: host
+    command: ${MOLECULE_DOCKER_COMMAND:-""}
+
+provisioner:
+  name: ansible
+  config_options:
+    defaults:
+      remote_tmp: /tmp/.ansible-${USER}/tmp/
+  playbooks:
+    prepare: "../../tests/prepare.yml"
+    converge: "../../tests/playbook.yml"
+    verify: "../../tests/verify.yml"
+  env:
+    ANSIBLE_ROLES_PATH: "${MOLECULE_PROJECT_DIRECTORY}/.."
+    PYTHON_UV_INSTALL: "${PYTHON_UV_INSTALL:-true}"
+    PYTHON_UV_VERSION: "${PYTHON_UV_VERSION:-0.9.3}"
+    PYTHON_PREFIX_DIR: "${PYTHON_PREFIX_DIR:-/opt/python}"
+
+verifier:
+  name: testinfra
+  env:
+    PYTHON_UV_INSTALL: "${PYTHON_UV_INSTALL:-true}"
+    PYTHON_UV_VERSION: "${PYTHON_UV_VERSION:-0.9.3}"
+    PYTHON_PREFIX_DIR: "${PYTHON_PREFIX_DIR:-/opt/python}"
+
+scenario:
+  test_sequence:
+    - dependency
+    - cleanup
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+    - idempotence
+    - verify
+    - cleanup
+    - destroy

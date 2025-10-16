@@ -1,14 +1,6 @@
-# file: python/tasks/pip.yml
-
-- name: python | pip | Fetch the pip install script
-  get_url:
-    dest: "/tmp/get-pip.py"
-    url: "{{get_pip_url}}"
-
-- name: python | pip | install pip
-  command: python /tmp/get-pip.py creates="{{python_pip_location}}"
-
-- name: python | pip | update setuptools
-  pip:
-    name: "setuptools{% if python_setuptools_version is defined %}=={{python_setuptools_version}}{% endif %}"
-    state: present
+---
+- name: "Install pip the new way"
+  apt:
+    pkg: "python3-pip"
+    state: "latest"
+  when: ansible_lsb.id == "Ubuntu"

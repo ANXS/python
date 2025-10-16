@@ -1,0 +1,115 @@
+---
+
+- name: Load UV checksums
+  ansible.builtin.include_vars: "../vars/uv_checksums.yml"
+
+- name: Detect system architecture
+  ansible.builtin.set_fact:
+    python_uv_arch: "{{ python_uv_arch_map[ansible_architecture] }}"
+  when: ansible_architecture in python_uv_arch_map
+
+- name: Fail if architecture is not supported
+  ansible.builtin.fail:
+    msg: >-
+      Unsupported architecture: {{ ansible_architecture }}.
+      Supported: {{ python_uv_arch_map.keys() | list }}
+  when: ansible_architecture not in python_uv_arch_map
+
+- name: Set UV download URL and filename
+  ansible.builtin.set_fact:
+    python_uv_filename: "uv-{{ python_uv_arch }}.tar.gz"
+    python_uv_download_url: >-
+      https://github.com/astral-sh/uv/releases/download/{{ python_uv_version }}/uv-{{ python_uv_arch }}.tar.gz
+
+- name: Debug UV version and architecture
+  ansible.builtin.debug:
+    msg: "UV Version: '{{ python_uv_version }}', Architecture: '{{ python_uv_arch }}'"
+
+- name: Get UV checksum for version and architecture
+  ansible.builtin.set_fact:
+    python_uv_checksum: "{{ python_uv_checksums[python_uv_version][python_uv_arch] }}"
+  when:
+    - python_uv_version is defined
+    - python_uv_version | string | length > 0
+    - python_uv_version in python_uv_checksums
+    - python_uv_arch in python_uv_checksums[python_uv_version]
+
+- name: Fail if checksum is not available
+  ansible.builtin.fail:
+    msg: >-
+      No checksum available for UV version '{{ python_uv_version }}' and architecture '{{ python_uv_arch }}'
+  when: python_uv_checksum is not defined
+
+- name: Check if UV binary exists
+  ansible.builtin.stat:
+    path: "{{ python_uv_install_path }}/uv"
+  register: uv_installed_stat
+
+- name: Check installed UV version (if present)
+  ansible.builtin.shell: "{{ python_uv_install_path }}/uv --version 2>&1"
+  register: uv_version_check
+  failed_when: false
+  changed_when: false
+  when: uv_installed_stat.stat.exists
+
+- name: Set flag if requested UV version is already installed
+  ansible.builtin.set_fact:
+    python_uv_already_installed: >-
+      {{ (uv_installed_stat.stat.exists | default(false)) and
+      ((uv_version_check.stdout | default('')) is string and
+      (uv_version_check.stdout | default('') | regex_search(python_uv_version | string)) is not none) }}
+
+- name: Create temporary directory for UV download
+  ansible.builtin.file:
+    path: "{{ python_uv_temp_dir }}/uv-install"
+    state: directory
+    mode: '0755'
+  when: not python_uv_already_installed
+
+- name: Download UV binary
+  ansible.builtin.get_url:
+    url: "{{ python_uv_download_url }}"
+    dest: "{{ python_uv_temp_dir }}/uv-install/{{ python_uv_filename }}"
+    checksum: "{{ python_uv_checksum }}"
+    mode: '0644'
+  register: uv_download
+  when: not python_uv_already_installed
+
+- name: Extract UV binary
+  ansible.builtin.unarchive:
+    src: "{{ python_uv_temp_dir }}/uv-install/{{ python_uv_filename }}"
+    dest: "{{ python_uv_temp_dir }}/uv-install"
+    remote_src: true
+    creates: "{{ python_uv_temp_dir }}/uv-install/uv-{{ python_uv_arch }}"
+  when:
+    - not python_uv_already_installed
+    - uv_download is changed
+
+- name: Ensure installation directory exists
+  ansible.builtin.file:
+    path: "{{ python_uv_install_path }}"
+    state: directory
+    mode: '0755'
+  when: not python_uv_already_installed
+
+- name: Install UV binary
+  ansible.builtin.copy:
+    src: "{{ python_uv_temp_dir }}/uv-install/uv-{{ python_uv_arch }}/uv"
+    dest: "{{ python_uv_install_path }}/uv"
+    mode: '0755'
+    remote_src: true
+  when: not python_uv_already_installed
+
+- name: Install UVX binary
+  ansible.builtin.copy:
+    src: "{{ python_uv_temp_dir }}/uv-install/uv-{{ python_uv_arch }}/uvx"
+    dest: "{{ python_uv_install_path }}/uvx"
+    mode: '0755'
+    remote_src: true
+  when: not python_uv_already_installed
+
+- name: Clean up temporary files
+  ansible.builtin.file:
+    path: "{{ python_uv_temp_dir }}/uv-install"
+    state: absent
+  when: not python_uv_already_installed
