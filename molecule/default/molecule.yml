@@ -6,8 +6,8 @@ driver:
   name: docker
 
 platforms:
-  - name: "ubuntu-${MOLECULE_UBUNTU_VERSION:-2404}${PYTHON_UV_SUFFIX}"
-    image: "geerlingguy/docker-ubuntu${MOLECULE_UBUNTU_VERSION:-2404}${PYTHON_UV_SUFFIX}-ansible:latest"
+  - name: "anxs-python-ubuntu-${MOLECULE_UBUNTU_VERSION:-2404}${PYTHON_UV_SUFFIX}"
+    image: "geerlingguy/docker-ubuntu${MOLECULE_UBUNTU_VERSION:-2404}-ansible:latest"
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
     privileged: true

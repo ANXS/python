@@ -41,9 +41,8 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - 2204-no-uv
-          - 2404-no-uv
-          - 2404-uv
+          - 2204
+          - 2404
 
     steps:
       - name: Checkout code
@@ -63,4 +62,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Run molecule test
-        run: make molecule-${{ matrix.config }}
+        run: molecule test
+        env:
+          MOLECULE_UBUNTU_VERSION: ${{ matrix.config }}
+

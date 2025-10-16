@@ -9,3 +9,4 @@ Icon
 .ansible
 __pycache__
 molecule*.log
+.act/
