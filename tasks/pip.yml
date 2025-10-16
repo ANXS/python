@@ -1,25 +1,6 @@
 ---
-- name: "install pip the old way"
-  block:
-    - name: "Fetch the pip install script"
-      get_url:
-        dest: "/tmp/get-pip.py"
-        url: "{{get_pip_url}}"
-
-    - name: "install pip"
-      command: python3 /tmp/get-pip.py
-      args:
-        creates: "{{python_pip_location}}"
-
-    - name: "update setuptools"
-      pip:
-        name: "setuptools{% if python_setuptools_version is defined %}=={{python_setuptools_version}}{% endif %}"
-        state: present
-
-  when: ansible_lsb.id == "Ubuntu" and ansible_lsb.major_release|int < 20
-
-- name: "install pip the new way"
+- name: "Install pip the new way"
   apt:
     pkg: "python3-pip"
     state: "latest"
-  when: ansible_lsb.id == "Ubuntu" and ansible_lsb.major_release|int >= 20
+  when: ansible_lsb.id == "Ubuntu"

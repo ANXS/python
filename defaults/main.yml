@@ -1,9 +1,11 @@
 ---
 python_prefix_dir: "/usr/local"
-python_pip_location: "{{python_prefix_dir}}/bin/pip"
-python_virtualenv_location: "{{python_prefix_dir}}/bin/virtualenv"
-# python_setuptools_version:    # default to latest
 
-get_pip_url: "https://bootstrap.pypa.io/get-pip.py"
-
+# List of optional deadsnakes versions to install
 python_versions: []
+
+# UV installation settings
+python_uv_install: false
+python_uv_version: "0.9.3"
+python_uv_install_path: "{{ python_prefix_dir }}/bin"
+python_uv_temp_dir: "/tmp"

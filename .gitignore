@@ -6,3 +6,6 @@ Icon
 .Spotlight-V100
 .Trashes
 .ci-env
+.ansible
+__pycache__
+molecule*.log

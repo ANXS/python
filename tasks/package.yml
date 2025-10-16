@@ -7,34 +7,34 @@
 
 - name: "Make sure the packages are installed"
   apt:
-    pkg: "{{python_packages_add}}"
+    pkg: "{{ python_packages_add }}"
     state: "latest"
     update_cache: true
   when: python_packages_add|default([])|length > 0
 
 - name: "Make sure old packages are removed"
   apt:
-    pkg: "{{python_packages_remove}}"
+    pkg: "{{ python_packages_remove }}"
     state: "absent"
   when: python_packages_remove|default([])|length > 0
 
-- name: "install additional (legacy) python versions, if requested"
+- name: "Install additional (legacy) python versions, if requested"
   apt:
     pkg:
-      - "python{{item}}"
-      - "python{{item}}-distutils"
-      - "python{{item}}-dev"
-      - "python{{item}}-venv"
+      - "python{{ item }}"
+      - "python{{ item }}-distutils"
+      - "python{{ item }}-dev"
+      - "python{{ item }}-venv"
     state: "latest"
-  with_items: "{{python_versions}}"
+  with_items: "{{ python_versions }}"
   when: item|float < 3.12
 
-- name: "install additional python versions, if requested"
+- name: "Install additional python versions, if requested"
   apt:
     pkg:
-      - "python{{item}}"
-      - "python{{item}}-dev"
-      - "python{{item}}-venv"
+      - "python{{ item }}"
+      - "python{{ item }}-dev"
+      - "python{{ item }}-venv"
     state: "latest"
-  with_items: "{{python_versions}}"
+  with_items: "{{ python_versions }}"
   when: item|float >= 3.12

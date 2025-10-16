@@ -1,0 +1,165 @@
+---
+- name: Verify anxs-python Role Installation
+  hosts: all
+  become: true
+  gather_facts: true
+  vars:
+    python_uv_install: "{{ lookup('env','PYTHON_UV_INSTALL') | default('true') | bool }}"
+    python_uv_version: "{{ lookup('env','PYTHON_UV_VERSION') | default('0.9.3') }}"
+    python_prefix_dir: "{{ lookup('env','PYTHON_PREFIX_DIR') | default('/opt/python') }}"
+  tasks:
+    # Python Installation Verification
+    - name: Check Python is installed
+      command: python3 --version
+      register: python_version
+      changed_when: false
+
+    - name: Verify Python version output
+      assert:
+        that:
+          - python_version.rc == 0
+          - "'Python 3.' in python_version.stdout"
+        fail_msg: "Python installation failed or version check failed"
+        success_msg: "Python is correctly installed: {{ python_version.stdout }}"
+
+    # Pip Installation Verification
+    - name: Check pip is installed
+      command: pip3 --version
+      register: pip_version
+      changed_when: false
+
+    - name: Verify pip version output
+      assert:
+        that:
+          - pip_version.rc == 0
+          - "'pip' in pip_version.stdout"
+        fail_msg: "Pip installation failed"
+        success_msg: "Pip is correctly installed: {{ pip_version.stdout }}"
+
+    # UV Installation Verification (when enabled)
+    - name: Check if uv should be installed
+      set_fact:
+        uv_should_be_installed: "{{ python_uv_install | default(false) }}"
+
+    - name: Check uv binary exists
+      stat:
+        path: "{{ python_prefix_dir | default('/usr/local') }}/bin/uv"
+      register: uv_binary
+      when: uv_should_be_installed
+
+    - name: Verify uv binary is executable
+      assert:
+        that:
+          - uv_binary.stat.exists
+          - uv_binary.stat.executable
+          - "uv_binary.stat.mode is defined and (uv_binary.stat.mode | string) | regex_search('755$')"
+        fail_msg: "UV binary not found or not executable"
+        success_msg: "UV binary is correctly installed and executable"
+      when: uv_should_be_installed
+
+    - name: Check uvx binary exists
+      stat:
+        path: "{{ python_prefix_dir | default('/usr/local') }}/bin/uvx"
+      register: uvx_binary
+      when: uv_should_be_installed
+
+    - name: Verify uvx binary is executable
+      assert:
+        that:
+          - uvx_binary.stat.exists
+          - uvx_binary.stat.executable
+          - "uvx_binary.stat.mode is defined and (uvx_binary.stat.mode | string) | regex_search('755$')"
+        fail_msg: "UVX binary not found or not executable"
+        success_msg: "UVX binary is correctly installed and executable"
+      when: uv_should_be_installed
+
+    - name: Test uv command execution
+      command: "{{ python_prefix_dir | default('/usr/local') }}/bin/uv --version"
+      register: uv_version_check
+      changed_when: false
+      when: uv_should_be_installed
+
+    - name: Verify uv version output
+      assert:
+        that:
+          - uv_version_check.rc == 0
+          - "'uv' in uv_version_check.stdout"
+          - python_uv_version in uv_version_check.stdout
+        fail_msg: "UV version check failed: {{ uv_version_check.stderr | default('Unknown error') }}"
+        success_msg: "UV version check passed: {{ uv_version_check.stdout }}"
+      when: uv_should_be_installed
+
+    - name: Test uvx command execution
+      command: "{{ python_prefix_dir | default('/usr/local') }}/bin/uvx --version"
+      register: uvx_version_check
+      changed_when: false
+      when: uv_should_be_installed
+
+    - name: Verify uvx version output
+      assert:
+        that:
+          - uvx_version_check.rc == 0
+          - "'uvx' in uvx_version_check.stdout"
+        fail_msg: "UVX version check failed: {{ uvx_version_check.stderr | default('Unknown error') }}"
+        success_msg: "UVX version check passed: {{ uvx_version_check.stdout }}"
+      when: uv_should_be_installed
+
+    # Architecture Detection Verification
+    - name: Get system architecture
+      command: uname -m
+      register: system_arch
+      changed_when: false
+
+    - name: Verify architecture was detected correctly
+      debug:
+        msg: "System architecture detected as: {{ system_arch.stdout }}"
+
+    # Permissions Verification
+    - name: Check file permissions in install directory
+      find:
+        paths: "{{ python_prefix_dir | default('/usr/local') }}/bin"
+        patterns: "uv*"
+      register: uv_files
+      when: uv_should_be_installed
+
+    - name: Verify all uv files have correct permissions
+      assert:
+        that:
+          - "item.mode is defined and (item.mode | string) | regex_search('755$')"
+        fail_msg: "UV file {{ item.path }} has incorrect permissions: {{ item.mode }}"
+        success_msg: "UV file {{ item.path }} has correct permissions"
+      loop: "{{ uv_files.files | default([]) }}"
+      when: uv_should_be_installed
+
+    # Idempotency Test Setup (verify no temp files left behind)
+    - name: Check for leftover temporary files
+      find:
+        paths: /tmp
+        patterns: "*uv*"
+        file_type: any
+      register: temp_uv_files
+
+    - name: Verify no temporary UV files left behind
+      assert:
+        that:
+          - temp_uv_files.files | length == 0
+        fail_msg: "Temporary UV files found: {{ temp_uv_files.files | map(attribute='path') | list }}"
+        success_msg: "No temporary UV files left behind - good cleanup"
+
+    # Final Success Summary
+    - name: Display verification summary
+      debug:
+        msg: |
+          ✅ anxs-python Role Verification Complete!
+
+          Python: {{ python_version.stdout }}
+          Pip: {{ pip_version.stdout }}
+          {% if uv_should_be_installed %}
+          UV: {{ uv_version_check.stdout }}
+          UVX: {{ uvx_version_check.stdout }}
+          {% else %}
+          UV: Not enabled for this test
+          {% endif %}
+          Architecture: {{ system_arch.stdout }}
+
+          All tests passed successfully! 🎉

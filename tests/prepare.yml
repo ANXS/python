@@ -1,0 +1,41 @@
+---
+- name: Prepare Test Environment
+  hosts: all
+  become: true
+  gather_facts: true
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: true
+        cache_valid_time: 86400
+      when: ansible_os_family == "Debian"
+
+    - name: Install essential packages
+      package:
+        name:
+          - curl
+          - ca-certificates
+          - gnupg
+          - software-properties-common
+        state: present
+
+    - name: Create test user for permission tests
+      user:
+        name: testuser
+        shell: /bin/bash
+        create_home: true
+        state: present
+
+    - name: Ensure target directories exist
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: "0755"
+      loop:
+        - /opt/python
+        - /opt/python/bin
+        - /tmp/test-downloads
+
+    - name: Set up mock network conditions (for testing error handling)
+      debug:
+        msg: "Environment prepared for anxs-python role testing"

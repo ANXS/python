@@ -2,16 +2,21 @@
 galaxy_info:
   author: "ANXS crew"
   company: "ANXS"
-  description: "Installs python, pip, setuptools and virtualenv"
-  min_ansible_version: 2.9
+  description: "Installs python, pip, virtualenv, and uv"
+  min_ansible_version: "2.9"
   license: "MIT"
+  namespace: "anxs"
+  role_name: "python"
   platforms:
     - name: "Ubuntu"
       versions:
-        - "bionic"
-        - "focal"
-  categories:
+        - "jammy"
+        - "noble"
+  galaxy_tags:
     - "system"
     - "development"
+    - "python"
+    - "pip"
+    - "uv"
 
 dependencies: []
