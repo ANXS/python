@@ -41,8 +41,15 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - 2204
-          - 2404
+          - os: ubuntu
+            version: 2204
+            image: geerlingguy/docker-ubuntu2204-ansible:latest
+          - os: ubuntu
+            version: 2404
+            image: geerlingguy/docker-ubuntu2404-ansible:latest
+          - os: debian
+            version: 13
+            image: geerlingguy/docker-debian13-ansible:latest
 
     steps:
       - name: Checkout code
@@ -64,5 +71,6 @@ jobs:
       - name: Run molecule test
         run: molecule test
         env:
-          MOLECULE_UBUNTU_VERSION: ${{ matrix.config }}
-
+          MOLECULE_OS: ${{ matrix.config.os }}
+          MOLECULE_VERSION: ${{ matrix.config.version }}
+          MOLECULE_IMAGE: ${{ matrix.config.image }}

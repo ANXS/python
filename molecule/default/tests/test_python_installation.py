@@ -35,11 +35,64 @@ class TestPythonInstallation:
         assert cmd.rc == 0
         assert "pip" in cmd.stdout
 
+    def _detect_os_release(self, host):
+        """Return a dict of /etc/os-release values"""
+        os_release = {}
+        f = host.file('/etc/os-release')
+        if not f.exists:
+            return os_release
+        for line in f.content_string.splitlines():
+            if '=' in line:
+                k, v = line.split('=', 1)
+                os_release[k.strip()] = v.strip().strip('"')
+        return os_release
+
     def test_python_packages_can_be_installed(self, host):
-        """Test that pip can install packages"""
-        # Test installing a simple package
-        cmd = host.run("pip3 install --user requests")
+        """Test that pip can install packages system-wide on supported distros
+
+        This test runs only on distributions which support system-level pip
+        installs (Ubuntu, or Debian older than 13). On Debian 13+ we skip this
+        because some packaging changes make system-level pip installs unreliable
+        in CI images.
+        """
+        osr = self._detect_os_release(host)
+        distro = osr.get('ID', '').lower()
+        version = osr.get('VERSION_ID', '')
+
+        # Skip system-level pip install test on Debian 13 and newer
+        if distro == 'debian' and version:
+            try:
+                major = int(version.split('.')[0])
+            except Exception:
+                major = None
+            if major and major >= 13:
+                pytest.skip("System-level pip installs are skipped on Debian 13+")
+
+        # Attempt a system-level install (CI runs as root inside molecule by
+        # default). We install a small package and assert success.
+        cmd = host.run("pip3 install requests")
         assert cmd.rc == 0
+
+    def test_python_packages_in_virtualenv(self, host):
+        """Create a virtualenv and install a package inside it"""
+        venv_dir = "/tmp/test-venv"
+
+        # Create the virtualenv
+        cmd = host.run(f"python3 -m venv {venv_dir}")
+        assert cmd.rc == 0
+
+        # Install a package inside the virtualenv
+        pip_bin = f"{venv_dir}/bin/pip"
+        cmd = host.run(f"{pip_bin} install requests")
+        assert cmd.rc == 0
+
+        # Verify the package can be imported using the virtualenv's python
+        py_bin = f"{venv_dir}/bin/python"
+        cmd = host.run(f"{py_bin} -c \"import requests; print(requests.__version__)\"")
+        assert cmd.rc == 0
+
+        # Cleanup the virtualenv
+        host.run(f"rm -rf {venv_dir}")
 
 
 class TestUVInstallation:

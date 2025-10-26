@@ -1,6 +1,13 @@
 ---
 - name: "Get the distribution specific variables"
-  include_vars: "{{ ansible_distribution | lower }}-{{ ansible_distribution_version }}.yml"
+  include_vars: "{{ lookup('ansible.builtin.first_found', params) }}"
+  vars:
+    params:
+      files:
+        - "{{ ansible_distribution | lower }}-{{ ansible_distribution_version }}.yml"
+        - "{{ ansible_distribution | lower }}-{{ (ansible_distribution_version.split('.') | first) }}.yml"
+      paths:
+        - "{{ role_path }}/vars"
 
 - name: "Install python and accesory packages"
   include_tasks: "package.yml"

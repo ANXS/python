@@ -10,3 +10,5 @@ Icon
 __pycache__
 molecule*.log
 .act/
+.#*
+*.*#
