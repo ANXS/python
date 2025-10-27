@@ -2,11 +2,14 @@
 name: Molecule CI
 
 # Run tests on pull requests and main branch pushes
+# todo: rename main branc
 on:
   pull_request:
-    branches: [main]
+    branches:
+      - "master"
   push:
-    branches: [main]
+    branches:
+      - "master"
   workflow_dispatch:  # Allow manual triggering
 
 jobs:
