@@ -47,5 +47,5 @@ rules:
     forbid-explicit-octal: false
 
   truthy:
-    allowed-values: ['true', 'false', 'yes', 'no']
+    allowed-values: ['true', 'false']
     check-keys: true
