@@ -1,40 +1,40 @@
 ---
 - name: "Make sure PPA is enabled"
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: "ppa:deadsnakes/ppa"
     mode: "0644"
   when: python_versions|length > 0
 
 - name: "Make sure the packages are installed"
-  apt:
+  ansible.builtin.apt:
     pkg: "{{ python_packages_add }}"
-    state: "latest"
+    state: "present"
     update_cache: true
   when: python_packages_add|default([])|length > 0
 
 - name: "Make sure old packages are removed"
-  apt:
+  ansible.builtin.apt:
     pkg: "{{ python_packages_remove }}"
     state: "absent"
   when: python_packages_remove|default([])|length > 0
 
 - name: "Install additional (legacy) python versions, if requested"
-  apt:
+  ansible.builtin.apt:
     pkg:
       - "python{{ item }}"
       - "python{{ item }}-distutils"
       - "python{{ item }}-dev"
       - "python{{ item }}-venv"
-    state: "latest"
+    state: "present"
   with_items: "{{ python_versions }}"
   when: item|float < 3.12
 
 - name: "Install additional python versions, if requested"
-  apt:
+  ansible.builtin.apt:
     pkg:
       - "python{{ item }}"
       - "python{{ item }}-dev"
       - "python{{ item }}-venv"
-    state: "latest"
+    state: "present"
   with_items: "{{ python_versions }}"
   when: item|float >= 3.12

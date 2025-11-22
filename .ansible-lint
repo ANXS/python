@@ -6,11 +6,6 @@ exclude_paths:
   - .github/
   - molecule/*/tests/
 
-skip_list:
-  - yaml[line-length]
-  - fqcn[action-core]  # todo this one is probably worth fixing
-  - package-latest
-
 offline: false
 
 supported_ansible_also:

@@ -6,32 +6,35 @@
   tasks:
 
     - name: Update apt cache
-      apt:
+      ansible.builtin.apt:
         update_cache: true
         cache_valid_time: 86400
       when: ansible_os_family == "Debian"
 
     - name: Install essential packages
-      apt:
+      ansible.builtin.apt:
         name:
           - curl
           - ca-certificates
           - gnupg
-          - "{{ 'software-properties-common' if (ansible_distribution != 'Debian' or (ansible_distribution == 'Debian' and (ansible_distribution_major_version | int) < 13)) else omit }}"
+          - |
+            {{ 'software-properties-common' if (ansible_distribution != 'Debian'
+            or (ansible_distribution == 'Debian'
+            and (ansible_distribution_major_version | int) < 13)) else omit }}
           - "lsb-release"
         state: present
         update_cache: yes
       when: ansible_os_family == "Debian"
 
     - name: Create test user for permission tests
-      user:
+      ansible.builtin.user:
         name: testuser
         shell: /bin/bash
         create_home: true
         state: present
 
     - name: Ensure target directories exist
-      file:
+      ansible.builtin.file:
         path: "{{ item }}"
         state: directory
         mode: "0755"
@@ -41,5 +44,5 @@
         - /tmp/test-downloads
 
     - name: Set up mock network conditions (for testing error handling)
-      debug:
+      ansible.builtin.debug:
         msg: "Environment prepared for anxs-python role testing"

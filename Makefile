@@ -73,6 +73,9 @@ test_workflow: act-download ## Run GitHub workflows, but locally
 
 test: molecule
 
+molecule-destroy:
+	$(molecule) destroy
+
 clean: molecule-destroy ## Clean up molecule instances and temporary files
 	@echo "Cleaning up..."
 	find . -name "*.pyc" -delete
@@ -82,4 +85,5 @@ clean: molecule-destroy ## Clean up molecule instances and temporary files
 
 distclean: clean
 	@echo "Dist cleaning..."
-	rm -rf $(shell pwd)/.act
+	find . -name "*.log" -exec rm {} + 2> /dev/null || true
+	find . -name ".act" -exec rm -rf {} + 2> /dev/null || true

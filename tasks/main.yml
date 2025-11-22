@@ -1,6 +1,6 @@
 ---
 - name: "Get the distribution specific variables"
-  include_vars: "{{ lookup('ansible.builtin.first_found', params) }}"
+  ansible.builtin.include_vars: "{{ lookup('ansible.builtin.first_found', params) }}"
   vars:
     params:
       files:
@@ -10,11 +10,11 @@
         - "{{ role_path }}/vars"
 
 - name: "Install python and accesory packages"
-  include_tasks: "package.yml"
+  ansible.builtin.include_tasks: "package.yml"
 
 - name: "Ensure pip is properly installed"
-  include_tasks: "pip.yml"
+  ansible.builtin.include_tasks: "pip.yml"
 
 - name: "Ensure uv is available if desired"
-  include_tasks: "uv.yml"
+  ansible.builtin.include_tasks: "uv.yml"
   when: python_uv_install

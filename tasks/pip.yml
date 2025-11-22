@@ -1,6 +1,6 @@
 ---
 - name: "Install pip the new way"
-  apt:
+  ansible.builtin.apt:
     pkg: "python3-pip"
-    state: "latest"
+    state: "present"
   when: ansible_lsb.id == "Ubuntu"

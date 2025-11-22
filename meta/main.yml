@@ -3,7 +3,7 @@ galaxy_info:
   author: "ANXS crew"
   company: "ANXS"
   description: "Installs python, pip, virtualenv, and uv"
-  min_ansible_version: "2.9"
+  min_ansible_version: "2.13"
   license: "MIT"
   namespace: "anxs"
   role_name: "python"
