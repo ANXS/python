@@ -1,8 +1,9 @@
 ## ANXS - python
 
-[![test workflow status](https://github.com/ANXS/python/actions/workflows/test.yml/badge.svg)](https://github.com/ANXS/python/actions/workflows/test.yml) ![Maintenance](https://img.shields.io/maintenance/yes/2025.svg)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/anxs/python/github-workflow-molecule.yml)
+![Maintenance](https://img.shields.io/maintenance/yes/2025.svg)
 
-Ansible role which installs python, pip, and virtualenv
+Ansible role which installs python, pip, virtualenv, and uv
 
 #### Requirements & Dependencies
 - Tested on Ansible 2.12 or higher.
