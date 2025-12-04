@@ -7,7 +7,7 @@ driver:
 
 platforms:
   - name: "anxs-python-${MOLECULE_OS:-ubuntu}-${MOLECULE_VERSION:-2404}${PYTHON_UV_SUFFIX}"
-    image: "${MOLECULE_IMAGE:-geerlingguy/docker-ubuntu2404-ansible:latest}"
+    image: "geerlingguy/docker-${MOLECULE_OS:-ubuntu}${MOLECULE_VERSION:-2404}-ansible:latest"
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
     privileged: true

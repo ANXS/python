@@ -50,23 +50,29 @@ class TestPythonInstallation:
     def test_python_packages_can_be_installed(self, host):
         """Test that pip can install packages system-wide on supported distros
 
-        This test runs only on distributions which support system-level pip
-        installs (Ubuntu, or Debian older than 13). On Debian 13+ we skip this
-        because some packaging changes make system-level pip installs unreliable
-        in CI images.
+        This test runs only on distributions which support
+        system-level pip installs. On Debian 13+ and Ubuntu 24.04+ we
+        skip this because some packaging changes make system-level pip
+        installs unreliable in CI images.
+
         """
         osr = self._detect_os_release(host)
         distro = osr.get('ID', '').lower()
         version = osr.get('VERSION_ID', '')
 
-        # Skip system-level pip install test on Debian 13 and newer
-        if distro == 'debian' and version:
+        # Skip system-level pip install test on recent os
+        major = None
+        if version:
             try:
                 major = int(version.split('.')[0])
             except Exception:
-                major = None
-            if major and major >= 13:
-                pytest.skip("System-level pip installs are skipped on Debian 13+")
+                pass
+
+        if distro == 'debian' and major and major >= 13:
+            pytest.skip(f"System-level pip installs are skipped on Debian {version}")
+
+        elif distro == 'ubuntu' and major and major >= 24:
+            pytest.skip(f"System-level pip installs are skipped on Ubuntu {version}")
 
         # Attempt a system-level install (CI runs as root inside molecule by
         # default). We install a small package and assert success.

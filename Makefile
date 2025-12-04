@@ -27,36 +27,34 @@ format: ## Format code with black and other formatters
 # Convenience molecule targets (Ubuntu)
 molecule-2204-no-uv:
 	@echo "molecule: ubuntu-22.04 (no uv)"
-	LOG=molecule-2204-no-uv.log; \
-	( MOLECULE_OS=ubuntu MOLECULE_VERSION=2204 PYTHON_UV_INSTALL=false $(molecule) test -s default 2>&1 | tee $$LOG ) || ( echo "FAILED: see $$LOG"; cat $$LOG; false )
+	@LOG=molecule-2204-no-uv.log; \
+	bash -o pipefail -c "MOLECULE_OS=ubuntu MOLECULE_VERSION=2204 PYTHON_UV_INSTALL=false $(molecule) test -s default 2>&1 | tee $$LOG" || \
+	( echo "FAILED: see $$LOG"; cat $$LOG; exit 1 )
 
 molecule-2404-no-uv:
 	@echo "molecule: ubuntu-24.04 (no uv)"
-	LOG=molecule-2404-no-uv.log; \
-	( MOLECULE_OS=ubuntu MOLECULE_VERSION=2404 PYTHON_UV_INSTALL=false $(molecule) test -s default 2>&1 | tee $$LOG ) || ( echo "FAILED: see $$LOG"; cat $$LOG; false )
+	@LOG=molecule-2404-no-uv.log; \
+	bash -o pipefail -c "MOLECULE_OS=ubuntu MOLECULE_VERSION=2404 PYTHON_UV_INSTALL=false $(molecule) test -s default 2>&1 | tee $$LOG" || \
+	( echo "FAILED: see $$LOG"; cat $$LOG; exit 1 )
 
 molecule-2404-uv:
 	@echo "molecule: ubuntu-24.04 (with uv)"
-	LOG=molecule-2404-uv.log; \
-	( MOLECULE_OS=ubuntu MOLECULE_VERSION=2404 PYTHON_UV_INSTALL=true PYTHON_UV_SUFFIX="-alt" $(molecule) test -s default 2>&1 | tee $$LOG ) || ( echo "FAILED: see $$LOG"; cat $$LOG; false )
+	@LOG=molecule-2404-uv.log; \
+	bash -o pipefail -c "MOLECULE_OS=ubuntu MOLECULE_VERSION=2404 PYTHON_UV_INSTALL=true PYTHON_UV_SUFFIX="-alt" $(molecule) test -s default 2>&1 | tee $$LOG" || \
+	( echo "FAILED: see $$LOG"; cat $$LOG; exit 1 )
 
 # Convenience molecule targets (Debian 13)
 molecule-debian-13-no-uv:
 	@echo "molecule: debian-13 (no uv)"
-	LOG=molecule-debian-13-no-uv.log; \
-	( MOLECULE_OS=debian MOLECULE_VERSION=13 MOLECULE_IMAGE=${MOLECULE_IMAGE:-geerlingguy/docker-debian13-ansible:latest} PYTHON_UV_INSTALL=false $(molecule) test -s default 2>&1 | tee $$LOG ) || ( echo "FAILED: see $$LOG"; cat $$LOG; false )
+	@LOG=molecule-debian-13-no-uv.log; \
+	bash -o pipefail -c "MOLECULE_OS=debian MOLECULE_VERSION=13 PYTHON_UV_INSTALL=false $(molecule) test -s default 2>&1 | tee $$LOG" || \
+	( echo "FAILED: see $$LOG"; cat $$LOG; exit 1 )
 
 molecule-debian-13-uv:
 	@echo "molecule: debian-13 (with uv)"
-	LOG=molecule-debian-13-uv.log; \
-	( MOLECULE_OS=debian MOLECULE_VERSION=13 MOLECULE_IMAGE=${MOLECULE_IMAGE:-geerlingguy/docker-debian13-ansible:latest} PYTHON_UV_INSTALL=true PYTHON_UV_SUFFIX="-alt" $(molecule) test -s default 2>&1 | tee $$LOG ) || ( echo "FAILED: see $$LOG"; cat $$LOG; false )
-
-# Generic runner: allows invocation like:
-#   make molecule-run MOLECULE_OS=debian MOLECULE_VERSION=13 MOLECULE_IMAGE=... PYTHON_UV_INSTALL=false
-molecule-run:
-	@echo "molecule: ${MOLECULE_OS:-ubuntu}-${MOLECULE_VERSION:-2404} (uv=${PYTHON_UV_INSTALL:-true})"
-	LOG=molecule-${MOLECULE_OS:-ubuntu}-${MOLECULE_VERSION:-2404}-$$( [ "${PYTHON_UV_INSTALL:-true}" = "true" ] && echo uv || echo no-uv ).log; \
-	( MOLECULE_OS="${MOLECULE_OS:-ubuntu}" MOLECULE_VERSION="${MOLECULE_VERSION:-2404}" MOLECULE_IMAGE="${MOLECULE_IMAGE:-geerlingguy/docker-${MOLECULE_OS:-ubuntu}${MOLECULE_VERSION:-2404}-ansible:latest}" PYTHON_UV_INSTALL="${PYTHON_UV_INSTALL:-true}" PYTHON_UV_SUFFIX="${PYTHON_UV_SUFFIX}" $(molecule) test -s default 2>&1 | tee $$LOG ) || ( echo "FAILED: see $$LOG"; cat $$LOG; false )
+	@LOG=molecule-debian-13-uv.log; \
+	bash -o pipefail -c "MOLECULE_OS=debian MOLECULE_VERSION=13 PYTHON_UV_INSTALL=true PYTHON_UV_SUFFIX="-alt" $(molecule) test -s default 2>&1 | tee $$LOG" || \
+	( echo "FAILED: see $$LOG"; cat $$LOG; exit 1 )
 
 act-download: ## download act
 	@if [ ! -f "$(ACT_BINARY)" ]; then \
@@ -71,7 +69,7 @@ test_workflow: act-download ## Run GitHub workflows, but locally
 	@echo "Running Tests!"
 	$(ACT_BINARY)
 
-test: molecule
+test: lint molecule
 
 molecule-destroy:
 	$(molecule) destroy
