@@ -2,6 +2,7 @@
 
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/anxs/python/github-workflow-molecule.yml)
 ![Maintenance](https://img.shields.io/maintenance/yes/2025.svg)
+![Ansible Role](https://img.shields.io/ansible/role/d/anxs/python)
 
 Ansible role which installs python, pip, virtualenv, and uv
 
