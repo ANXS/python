@@ -1,8 +1,6 @@
 ---
 name: Molecule CI
 
-# Run tests on pull requests and main branch pushes
-# todo: rename main branc
 on:
   pull_request:
     branches:
@@ -10,7 +8,7 @@ on:
   push:
     branches:
       - "master"
-  workflow_dispatch:  # Allow manual triggering
+  workflow_dispatch:
 
 jobs:
   lint:
@@ -23,7 +21,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.x'
+          python-version: '3.13'
 
       - name: Install dependencies
         run: |
@@ -59,9 +57,9 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.x'
+          python-version: '3.13'
 
       - name: Install dependencies
         run: |
