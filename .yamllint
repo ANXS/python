@@ -44,7 +44,7 @@ rules:
 
   octal-values:
     forbid-implicit-octal: true
-    forbid-explicit-octal: false
+    forbid-explicit-octal: true
 
   truthy:
     allowed-values: ['true', 'false']
