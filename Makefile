@@ -1,4 +1,4 @@
-.PHONY: lint test test-ubuntu2204 test-ubuntu2404 test-ubuntu2404-uv test-debian13 test-debian13-uv test-all act act-download clean distclean
+.PHONY: lint test test-ubuntu2204 test-ubuntu2404 test-ubuntu2404-uv test-debian12 test-debian12-uv test-debian13 test-debian13-uv test-all act act-download clean distclean
 
 VENV := .venv
 BIN := $(VENV)/bin
@@ -31,6 +31,16 @@ test-ubuntu2404-uv: $(VENV)
 		PYTHON_UV_INSTALL=true PYTHON_UV_SUFFIX="-uv" \
 		$(BIN)/molecule test
 
+test-debian12: $(VENV)
+	MOLECULE_OS=debian MOLECULE_VERSION=12 \
+		PYTHON_UV_INSTALL=false \
+		$(BIN)/molecule test
+
+test-debian12-uv: $(VENV)
+	MOLECULE_OS=debian MOLECULE_VERSION=12 \
+		PYTHON_UV_INSTALL=true PYTHON_UV_SUFFIX="-uv" \
+		$(BIN)/molecule test
+
 test-debian13: $(VENV)
 	MOLECULE_OS=debian MOLECULE_VERSION=13 \
 		PYTHON_UV_INSTALL=false \
@@ -41,7 +51,7 @@ test-debian13-uv: $(VENV)
 		PYTHON_UV_INSTALL=true PYTHON_UV_SUFFIX="-uv" \
 		$(BIN)/molecule test
 
-test-all: test-ubuntu2204 test-ubuntu2404 test-ubuntu2404-uv test-debian13 test-debian13-uv
+test-all: test-ubuntu2204 test-ubuntu2404 test-ubuntu2404-uv test-debian12 test-debian12-uv test-debian13 test-debian13-uv
 
 ACT_VERSION ?= 0.2.82
 ACT_BINARY := $(CURDIR)/.act/act
