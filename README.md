@@ -1,26 +1,29 @@
-## [ANXS](http://anxs.io/) - python
+## [ANXS](https://github.com/ANXS) - python
 
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/anxs/python/github-workflow-molecule.yml)
-![Maintenance](https://img.shields.io/maintenance/yes/2026.svg)
-![Ansible Role](https://img.shields.io/ansible/role/d/anxs/python)
-![GitHub License](https://img.shields.io/github/license/anxs/python)
+[![CI Status](https://img.shields.io/github/actions/workflow/status/anxs/python/ci.yml)](https://github.com/ANXS/python/actions/workflows/ci.yml)
+[![Maintenance](https://img.shields.io/maintenance/yes/2026.svg)](https://github.com/ANXS/python)
+[![Ansible Role](https://img.shields.io/ansible/role/d/anxs/python)](https://galaxy.ansible.com/ui/standalone/roles/ANXS/python/)
+[![License](https://img.shields.io/github/license/ANXS/python)](https://github.com/ANXS/python/blob/master/LICENSE)
 
-Ansible role which installs python, pip, virtualenv, and uv
+Ansible role for installing Python 3, pip, and virtualenv from system packages, with optional support for additional Python versions via the [deadsnakes PPA](https://launchpad.net/~deadsnakes/+archive/ubuntu/ppa) and the [uv](https://github.com/astral-sh/uv) package manager.
 
 ## Requirements & Dependencies
 
-* Tested on Ansible 2.12 or higher.
+* Ansible 2.13 or higher.
+* Ubuntu 22.04+ or Debian 12+.
 
 ## Variables
 
-This is a partial listing of configurable variables
+Two commonly adjusted variables. See [`defaults/main.yml`](https://github.com/ANXS/python/blob/master/defaults/main.yml) for the full set.
 
-* `python_versions` is a list of python versions to install from the [deadsnakes](https://launchpad.net/~deadsnakes/+archive/ubuntu/ppa) PPA.
-* `python_uv_version` can be set to `true` to install [uv](https://github.com/astral-sh/uv).
+* `python_versions` (default empty list) is a list of additional Python versions to install from the deadsnakes PPA.
+* `python_uv_install` (default false) to install `uv` package manager.
 
 ## Testing
 
-This project uses molecule to test a few scenarios. You can kick off the tests (and linting) with `make test`.
+Tests use [Molecule](https://github.com/ansible/molecule) with Docker and [Testinfra](https://testinfra.readthedocs.io/). Run the full suite with `make test`, or target a specific platform (e.g. `make test-ubuntu2404`).
+
+The test suite covers Python 3 and pip package installation, virtualenv creation, uv binary installation and architecture detection, and file permissions. Tests run across all supported Linux distributions.
 
 ## Note on AI Usage
 
@@ -28,4 +31,4 @@ This project has been developed with AI assistance. Contributions making use of 
 
 ## Feedback, bug-reports, requests, ...
 
-Are [welcome](https://github.com/ANXS/python/issues)!
+Are all [welcome](https://github.com/ANXS/python/issues)!
