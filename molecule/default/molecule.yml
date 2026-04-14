@@ -20,10 +20,6 @@ provisioner:
   config_options:
     defaults:
       remote_tmp: /tmp/.ansible-${USER}/tmp/
-  playbooks:
-    prepare: "../../tests/prepare.yml"
-    converge: "../../tests/playbook.yml"
-    verify: "../../tests/verify.yml"
   env:
     ANSIBLE_ROLES_PATH: "${MOLECULE_PROJECT_DIRECTORY}/.."
     PYTHON_UV_INSTALL: "${PYTHON_UV_INSTALL:-true}"

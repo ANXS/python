@@ -1,7 +1,13 @@
 ---
 - name: Converge
   hosts: all
-  tasks:
-    - name: "Include ANXS Role"
-      ansible.builtin.include_role:
-        name: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') | basename }}"
+  become: true
+  gather_facts: true
+  vars:
+    python_uv_install: "{{ lookup('env', 'PYTHON_UV_INSTALL') | default('true') | bool }}"
+    python_uv_version: "{{ lookup('env', 'PYTHON_UV_VERSION') | default('0.9.3') }}"
+    python_prefix_dir: "{{ lookup('env', 'PYTHON_PREFIX_DIR') | default('/opt/python') }}"
+    python_versions: []
+    python_ppa: "deadsnakes/ppa"
+  roles:
+    - role: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') | basename }}"

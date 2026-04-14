@@ -1,10 +1,9 @@
 ---
-- name: Prepare Test Environment
+- name: Prepare
   hosts: all
   become: true
   gather_facts: true
   tasks:
-
     - name: Update apt cache
       ansible.builtin.apt:
         update_cache: true
@@ -42,7 +41,3 @@
         - /opt/python
         - /opt/python/bin
         - /tmp/test-downloads
-
-    - name: Set up mock network conditions (for testing error handling)
-      ansible.builtin.debug:
-        msg: "Environment prepared for anxs-python role testing"
