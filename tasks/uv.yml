@@ -5,15 +5,15 @@
 
 - name: Detect system architecture
   ansible.builtin.set_fact:
-    python_uv_arch: "{{ python_uv_arch_map[ansible_architecture] }}"
-  when: ansible_architecture in python_uv_arch_map
+    python_uv_arch: "{{ python_uv_arch_map[ansible_facts['architecture']] }}"
+  when: ansible_facts['architecture'] in python_uv_arch_map
 
 - name: Fail if architecture is not supported
   ansible.builtin.fail:
     msg: >-
-      Unsupported architecture: {{ ansible_architecture }}.
+      Unsupported architecture: {{ ansible_facts['architecture'] }}.
       Supported: {{ python_uv_arch_map.keys() | list }}
-  when: ansible_architecture not in python_uv_arch_map
+  when: ansible_facts['architecture'] not in python_uv_arch_map
 
 - name: Set UV download URL and filename
   ansible.builtin.set_fact:

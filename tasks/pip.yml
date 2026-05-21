@@ -3,4 +3,4 @@
   ansible.builtin.apt:
     pkg: "python3-pip"
     state: "present"
-  when: ansible_lsb.id == "Ubuntu"
+  when: ansible_facts['lsb']['id'] == "Ubuntu"

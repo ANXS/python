@@ -8,7 +8,7 @@
       ansible.builtin.apt:
         update_cache: true
         cache_valid_time: 86400
-      when: ansible_os_family == "Debian"
+      when: ansible_facts['os_family'] == "Debian"
 
     - name: Install essential packages
       ansible.builtin.apt:
@@ -17,13 +17,13 @@
           - ca-certificates
           - gnupg
           - |
-            {{ 'software-properties-common' if (ansible_distribution != 'Debian'
-            or (ansible_distribution == 'Debian'
-            and (ansible_distribution_major_version | int) < 13)) else omit }}
+            {{ 'software-properties-common' if (ansible_facts['distribution'] != 'Debian'
+            or (ansible_facts['distribution'] == 'Debian'
+            and (ansible_facts['distribution_major_version'] | int) < 13)) else omit }}
           - "lsb-release"
         state: present
         update_cache: true
-      when: ansible_os_family == "Debian"
+      when: ansible_facts['os_family'] == "Debian"
 
     - name: Create test user for permission tests
       ansible.builtin.user:

@@ -4,8 +4,8 @@
   vars:
     params:
       files:
-        - "{{ ansible_distribution | lower }}-{{ ansible_distribution_version }}.yml"
-        - "{{ ansible_distribution | lower }}-{{ (ansible_distribution_version.split('.') | first) }}.yml"
+        - "{{ ansible_facts['distribution'] | lower }}-{{ ansible_facts['distribution_version'] }}.yml"
+        - "{{ ansible_facts['distribution'] | lower }}-{{ (ansible_facts['distribution_version'].split('.') | first) }}.yml"
       paths:
         - "{{ role_path }}/vars"
 

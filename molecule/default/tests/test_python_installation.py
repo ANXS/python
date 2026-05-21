@@ -51,9 +51,9 @@ class TestPythonInstallation:
         """Test that pip can install packages system-wide on supported distros
 
         This test runs only on distributions which support
-        system-level pip installs. On Debian 13+ and Ubuntu 24.04+ we
-        skip this because some packaging changes make system-level pip
-        installs unreliable in CI images.
+        system-level pip installs. On Debian 12+ and Ubuntu 24.04+ we
+        skip this because PEP 668 marks the environment as externally
+        managed, blocking bare pip installs.
 
         """
         osr = self._detect_os_release(host)
@@ -68,7 +68,7 @@ class TestPythonInstallation:
             except Exception:
                 pass
 
-        if distro == 'debian' and major and major >= 13:
+        if distro == 'debian' and major and major >= 12:
             pytest.skip(f"System-level pip installs are skipped on Debian {version}")
 
         elif distro == 'ubuntu' and major and major >= 24:
